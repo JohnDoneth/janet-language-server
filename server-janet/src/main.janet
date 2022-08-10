@@ -1,6 +1,7 @@
 (import ./rpc)
 (import spork/json :as json)
 (import ./eval)
+(import ./lookup)
 
 (defn parse-content-length [input]
   (int/to-number 
@@ -43,20 +44,9 @@
 
 
 (defn on-document-diagnostic [state params]
-  
-  (pp state)
-
-  (pp params)
-
-
   (var uri (get-in params ["textDocument" "uri"]))
 
-  (pp uri)
-
   (var content (get-in state [:documents uri :content]))
-
-
-  (pp content)
 
   (var items @[])
 
@@ -112,6 +102,32 @@
       }
     }]))
 
+(defn on-document-hover [state params]
+
+  (var uri (get-in params ["textDocument" "uri"]))
+  (var content (get-in state [:documents uri :content]))
+
+  (pp params)
+
+  (def {"line" line "character" character} (get params "position"))
+
+  (def hover-word (lookup/word-at {:line line :character character} content))
+
+  (pp hover-word)
+
+  (pp (get (dyn (symbol hover-word)) :doc))
+
+  [:ok state (match hover-word
+    nil {}
+    _ {
+      :contents {
+        :kind "markdown"
+        :value (get (dyn (symbol hover-word)) :doc)
+      }
+    }
+  )]
+  )
+
 (defn on-initialize [state params]
   [:ok state {
     :capabilities {
@@ -126,6 +142,7 @@
         :interFileDependencies true
 	      :workspaceDiagnostics false
       }
+      :hoverProvider true
     }
   }])
 
@@ -142,6 +159,7 @@
       "textDocument/completion" (on-completion state params)
       "completionItem/resolve" (on-completion-item-resolve state params)
       "textDocument/diagnostic" (on-document-diagnostic state params)
+      "textDocument/hover" (on-document-hover state params)
       [:ok state {}])))
 
 

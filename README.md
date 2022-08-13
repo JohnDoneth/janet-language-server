@@ -1,5 +1,7 @@
 # Language Server for the Janet Programming Language
 
+Contains the Language Server itself and the associated VSCode Extension.
+
 ## Supported Features
 
 - Partial code-completion via discovered bindings

@@ -1,6 +1,6 @@
 
 (declare-project
-  :name "janet-ls"
+  :name "janet-language-server"
   :description ``` ```
   :version "0.0.0"
   :dependencies [
@@ -16,5 +16,5 @@
   ])
 
 (declare-executable
-  :name "janet-ls"
+  :name "janet-language-server"
   :entry "src/main.janet")

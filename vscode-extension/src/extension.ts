@@ -12,7 +12,7 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
   const serverOptions: ServerOptions = {
     command:
-      "/home/john/projects/janet-language-server/server-janet/build/janet-ls",
+      "/home/john/projects/janet-language-server/language-server/build/janet-language-server",
     args: [],
     transport: TransportKind.stdio,
   };

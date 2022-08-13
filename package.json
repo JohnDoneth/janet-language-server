@@ -34,6 +34,13 @@
 				"configuration": "./language-configuration.json"
 			}
 		],
+		"grammars": [
+			{
+				"language": "janet",
+				"scopeName": "source.janet",
+				"path": "./client/syntaxes/janet.tmLanguage"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "Example configuration",

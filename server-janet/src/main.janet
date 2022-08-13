@@ -77,13 +77,6 @@
   [:ok state {}])
 
 (defn on-completion [state params]
-
-  #(let [
-  #  uri (get-in params ["textDocument" "uri"])
-  #]
-  #(put-in state [:documents uri] @{:content content})
-
-
   [:ok state {
 			:isIncomplete true
 			:items (map (fn [x] {:label x}) (all-bindings))
@@ -100,19 +93,12 @@
     }]))
 
 (defn on-document-hover [state params]
-
   (var uri (get-in params ["textDocument" "uri"]))
   (var content (get-in state [:documents uri :content]))
 
-  (pp params)
-
   (def {"line" line "character" character} (get params "position"))
 
-  (def hover-word (lookup/word-at {:line line :character character} content))
-
-  (pp hover-word)
-
-  (pp (get (dyn (symbol hover-word)) :doc))
+  (def {:word hover-word  :range [start end]} (lookup/word-at {:line line :character character} content))
 
   [:ok state (match hover-word
     nil {}
@@ -121,11 +107,20 @@
         :kind "markdown"
         :value (get (dyn (symbol hover-word)) :doc)
       }
+      :range {
+        :start {:line line :character start}
+        :end {:line line :character end}
+      }
     }
   )]
   )
 
-(defn on-initialize [state params]
+(defn on-initialize 
+  `` 
+  Called by the LSP client to recieve a list of capabilities
+  that this server provides so the client knows what it can request.
+  ``
+  [state params]
   [:ok state {
     :capabilities {
       :completionProvider {
@@ -195,7 +190,6 @@
   )
 )
 
-
 (defn message-loop [state]  
   (let [message (read-message)]
     (match (handle-message message state)
@@ -212,6 +206,12 @@
 
 (defn main [args &]
   (init-logger)
+
+  # TODO: Don't hardcode this.
+  # Before evaling document, set for eval environment only?
+  (array/push module/paths ["/home/john/projects/janet-language-server/server-janet/src/:all:.janet" :source])
+  (array/push module/paths ["/home/john/projects/janet-language-server/server-janet/src/:all:.janet" :native])
+  (array/push module/paths ["/home/john/projects/janet-language-server/server-janet/src/:all:.janet" :jimage])
 
   (let [state (init-state)]
     (message-loop state))

@@ -40,9 +40,6 @@
   [:ok state {}]))
 
 
-(defn put-in-struct [])
-
-
 (defn on-document-diagnostic [state params]
   (var uri (get-in params ["textDocument" "uri"]))
 
@@ -165,7 +162,7 @@
 
 (defn write-response [file response]
   # Write headers
-  (file/write file (string "Content-Length: " (length response) "\n\n"))
+  (file/write file (string "Content-Length: " (length response) "\r\n\r\n"))
   (log (string "Content-Length: " (length response) "\n\n"))
 
   # Write response
@@ -186,7 +183,7 @@
   (let [input (file/read stdin :line)]
     (log input)
 
-    (let [content-length (+ (parse-content-length input) 1)]
+    (let [content-length (+ (parse-content-length input) 2)]
 
       (log (string "reading " content-length))
 

@@ -13,10 +13,69 @@
 		"vscode": "^1.70.0"
 	},
 	"dependencies": {
+		"@types/json-schema": "^7.0.11",
 		"vscode-languageclient": "^8.0.0"
 	},
 	"devDependencies": {
+		"@types/mocha": "^9.1.0",
+		"@types/node": "^16.11.7",
 		"@types/vscode": "^1.70.0",
-		"@vscode/test-electron": "^2.1.2"
-	}
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
+		"@vscode/test-electron": "^2.1.2",
+		"eslint": "^8.13.0",
+		"mocha": "^9.2.1",
+		"typescript": "^4.7.2"
+	},
+	"contributes": {
+		"languages": [
+			{
+				"id": "janet",
+				"extensions": [
+					".janet"
+				],
+				"aliases": [
+					"Janet",
+					"janet"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "janet",
+				"scopeName": "source.janet",
+				"path": "./client/syntaxes/janet.tmLanguage"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+				"JanetLS.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"JanetLS.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "verbose",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		}
+	},
+	"categories": [],
+	"keywords": [],
+	"activationEvents": [
+		"onLanguage:janet"
+	],
+	"main": "./out/extension"
 }

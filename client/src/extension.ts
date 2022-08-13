@@ -17,8 +17,6 @@ export function activate(context: ExtensionContext) {
     transport: TransportKind.stdio,
   };
 
-  console.log("starting");
-
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
     // Register the server for plain text documents

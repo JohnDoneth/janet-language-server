@@ -154,10 +154,21 @@
       "textDocument/hover" (on-document-hover state params)
       [:ok state {}])))
 
+(defn line-ending [] 
+  (case (os/which)
+    :windows "\n\n"
+    "\r\n\r\n"
+  ))
+
+(defn read-offset [] 
+  (case (os/which)
+    :windows 1
+    2
+  ))
 
 (defn write-response [file response]
   # Write headers
-  (file/write file (string "Content-Length: " (length response) "\r\n\r\n"))
+  (file/write file (string "Content-Length: " (length response) (line-ending)))
   (log (string "Content-Length: " (length response) "\n\n"))
 
   # Write response
@@ -178,7 +189,7 @@
   (let [input (file/read stdin :line)]
     (log input)
 
-    (let [content-length (+ (parse-content-length input) 2)]
+    (let [content-length (+ (parse-content-length input) (read-offset))]
 
       (log (string "reading " content-length))
 

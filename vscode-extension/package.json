@@ -1,16 +1,15 @@
 {
-	"name": "lsp-sample-client",
-	"description": "VSCode part of a language server",
-	"author": "Microsoft Corporation",
+	"name": "janet-language-server",
+	"description": "Language Server for the Janet Programming Language",
+	"author": "JohnDoneth",
 	"license": "MIT",
 	"version": "0.0.1",
-	"publisher": "vscode",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
-	},
 	"engines": {
 		"vscode": "^1.70.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/JohnDoneth/janet-language-server"
 	},
 	"dependencies": {
 		"@types/json-schema": "^7.0.11",
@@ -25,7 +24,8 @@
 		"@vscode/test-electron": "^2.1.2",
 		"eslint": "^8.13.0",
 		"mocha": "^9.2.1",
-		"typescript": "^4.7.2"
+		"typescript": "^4.7.2",
+		"vsce": "^2.10.0"
 	},
 	"contributes": {
 		"languages": [
@@ -45,7 +45,7 @@
 			{
 				"language": "janet",
 				"scopeName": "source.janet",
-				"path": "./client/syntaxes/janet.tmLanguage"
+				"path": "./syntaxes/janet.tmLanguage"
 			}
 		],
 		"configuration": {
@@ -83,7 +83,6 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint ./client/src --ext .ts,.tsx",
-		"postinstall": "cd client && npm install && cd ..",
 		"test": "sh ./scripts/e2e.sh"
 	}
 }
